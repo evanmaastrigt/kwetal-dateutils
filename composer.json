@@ -1,0 +1,15 @@
+{
+    "name": "kwetal/dateutils",
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-0": {
+            "Kwetal\\DateUtils": "src/"
+        }
+    }
+}
