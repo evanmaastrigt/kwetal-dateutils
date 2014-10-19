@@ -67,6 +67,24 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    public function lastWeekProvider()
+    {
+        return [
+            [2014, 1, 'Fri', '2014-01-31'],
+            [2014, 2, 'Sat', '2014-02-22'],
+            [2014, 3, 'Sun', '2014-03-30'],
+            [2014, 4, 'Mon', '2014-04-28'],
+            [2014, 5, 'Tue', '2014-05-27'],
+            [2014, 6, 'Wed', '2014-06-25'],
+            [2014, 7, 'Thu', '2014-07-31'],
+            [2014, 8, 'Fri', '2014-08-29'],
+            [2014, 9, 'Sat', '2014-09-27'],
+            [2014, 10, 'Sun', '2014-10-26'],
+            [2014, 11, 'Mon', '2014-11-24'],
+            [2014, 12, 'Tue', '2014-12-30'],
+        ];
+    }
+
     /**
      * @test
      * @expectedException InvalidArgumentException
@@ -163,6 +181,35 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     public function testGetLastDayOfMonthReturnsCorrectDate($a, $b, $expected)
     {
         $object = DateUtils::getLastDayOfMonth($a, $b);
+
+        $this->assertEquals($expected, $object->format('Y-m-d'));
+    }
+
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     */
+    public function testGetLastWeekdayOfMonthThrowsExceptionOnInvalidYearOrMonth()
+    {
+        DateUtils::getLastWeekdayOfMonth('unit', 'test', 'Sun');
+    }
+
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     */
+    public function testGetLastWeekdayOfMonthThrowsExceptionOnInvalidWeekday()
+    {
+        DateUtils::getLastWeekdayOfMonth(2014, 3, 'WTF');
+    }
+
+    /**
+     * @ptest
+     * @dataProvider lastWeekProvider
+     */
+    public function testGetLastWeekdayOfMonthReturnsCorrectDate($a, $b, $c, $expected)
+    {
+        $object = DateUtils::getLastWeekdayOfMonth($a, $b, $c);
 
         $this->assertEquals($expected, $object->format('Y-m-d'));
     }

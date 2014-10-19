@@ -8,6 +8,12 @@ namespace Kwetal\DateUtils;
  */
 class DateUtils
 {
+    const EASTER_JULIAN   = 1;
+    const EASTER_ORTHODOX = 2;
+    const EASTER_WESTERN  = 3;
+
+    protected static $validWeekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
     /**
      * Returns the nth weekday in a given month.
      *
@@ -23,7 +29,7 @@ class DateUtils
      */
     public static function getNthWeekdayInMonth($year, $month, $weekday, $num = 1, \DateTime $start = null)
     {
-        if (! in_array($weekday, ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])) {
+        if (! in_array($weekday, self::$validWeekdays)) {
             throw new \InvalidArgumentException("Invalid value For weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').");
         }
 
@@ -61,8 +67,40 @@ class DateUtils
     }
 
     /**
-     * @param $year
-     * @param $month
+     * @param int $year
+     * @param int $month
+     * @param string $weekday
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return \DateTime
+     */
+    public static function getLastWeekdayOfMonth($year, $month, $weekday)
+    {
+        if (! in_array($weekday, self::$validWeekdays)) {
+            throw new \InvalidArgumentException("Invalid value For weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').");
+        }
+
+        try {
+            $day = new \DateTime($year . '-' . $month . '-' . self::getLastDayOfMonth($year, $month)->format('d'));
+        } catch (\Exception $e) {
+            throw new \InvalidArgumentException($e->getMessage());
+        }
+
+        while (true) {
+            if ($day->format('D') == $weekday) {
+                break;
+            }
+
+            $day->sub(new \DateInterval('P1D'));
+        }
+
+        return $day;
+    }
+
+    /**
+     * @param int $year
+     * @param int $month
      *
      * @throws \InvalidArgumentException
      *
