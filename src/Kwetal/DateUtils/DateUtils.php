@@ -24,11 +24,11 @@ class DateUtils
     public static function getNthWeekdayInMonthAndYear($year, $month, $weekday, $num = 1, \DateTime $start = null)
     {
         if (! in_array($weekday, ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])) {
-            throw new \InvalidArgumentException("Invalid value For weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')");
+            throw new \InvalidArgumentException("Invalid value For weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').");
         }
 
         try {
-            $day = new \DateTime($year . '-' . $month . '-' . '1');
+            $day = new \DateTime($year . '-' . $month . '-1');
         } catch (\Exception $e) {
             throw new \InvalidArgumentException($e->getMessage());
         }
@@ -41,13 +41,13 @@ class DateUtils
         }
 
         $counter = 0;
-        while(true) {
+        while (true) {
             if ($day->format('n') !== (string) $month) {
                 return null;
             }
 
             if ($day->format('D') === $weekday) {
-                $counter++;
+                ++$counter;
             }
 
             if ($counter == $num) {
@@ -60,4 +60,3 @@ class DateUtils
         return $day;
     }
 }
-
