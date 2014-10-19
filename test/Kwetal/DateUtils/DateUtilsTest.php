@@ -45,13 +45,35 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    public function monthProvider()
+    {
+        return [
+            [2012, 1, '2012-01-31'],
+            [2012, 2, '2012-02-29'],
+            [2013, 2, '2013-02-28'],
+            [2014, 2, '2014-02-28'],
+            [2015, 2, '2015-02-28'],
+            [2016, 2, '2016-02-29'],
+            [2012, 3, '2012-03-31'],
+            [2012, 4, '2012-04-30'],
+            [2012, 5, '2012-05-31'],
+            [2012, 6, '2012-06-30'],
+            [2012, 7, '2012-07-31'],
+            [2012, 8, '2012-08-31'],
+            [2012, 9, '2012-09-30'],
+            [2012, 10, '2012-10-31'],
+            [2012, 11, '2012-11-30'],
+            [2012, 12, '2012-12-31'],
+        ];
+    }
+
     /**
      * @test
      * @expectedException InvalidArgumentException
      */
     public function  testGetNthWeekdayInMontInYearThrowsExceptionOnInvalidDayString()
     {
-        DateUtils::getNthWeekdayInMonthAndYear(2014, 10, 'WTF', 1);
+        DateUtils::getNthWeekdayInMonth(2014, 10, 'WTF', 1);
     }
 
     /**
@@ -60,7 +82,7 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function  testGetNthWeekdayInMontInYearThrowsExceptionOnInvalidDate()
     {
-        DateUtils::getNthWeekdayInMonthAndYear('I', 'am', 'Sun', 1);
+        DateUtils::getNthWeekdayInMonth('I', 'am', 'Sun', 1);
     }
 
     /**
@@ -69,7 +91,7 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function  testGetNthWeekdayInMontInYearThrowsExceptionOnDateMismatch()
     {
-        DateUtils::getNthWeekdayInMonthAndYear(2014, 1, 'Sun', 1, new \DateTime('2010-05-01'));
+        DateUtils::getNthWeekdayInMonth(2014, 1, 'Sun', 1, new \DateTime('2010-05-01'));
     }
 
     /**
@@ -77,17 +99,18 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function  testGetNthWeekdayInMontInYearReturnsDateTime()
     {
-        $object = DateUtils::getNthWeekdayInMonthAndYear(2014, 1, 'Mon', 1);
+        $object = DateUtils::getNthWeekdayInMonth(2014, 1, 'Mon', 1);
 
         $this->assertInstanceOf('DateTime', $object);
     }
+
 
     /**
      * @test
      */
     public function  testGetNthWeekdayInMontInYearReturnsNullWithInvalidNumParameter()
     {
-        $object = DateUtils::getNthWeekdayInMonthAndYear(2014, 1, 'Mon', 8);
+        $object = DateUtils::getNthWeekdayInMonth(2014, 1, 'Mon', 8);
 
         $this->assertNull($object);
     }
@@ -98,7 +121,7 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function  testGetNthWeekdayInMontInYearWithStartDateReturnsCorrectDateTime($a, $b, $c, $d, $e, $expected)
     {
-        $object = DateUtils::getNthWeekdayInMonthAndYear($a, $b, $c, $d, $e);
+        $object = DateUtils::getNthWeekdayInMonth($a, $b, $c, $d, $e);
 
         $this->assertEquals($expected, $object->format('Y-m-d'));
     }
@@ -109,7 +132,37 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
      */
     public function  testGetNthWeekdayInMontInYearReturnsCorrectDateTime($a, $b, $c, $d, $expected)
     {
-        $object = DateUtils::getNthWeekdayInMonthAndYear($a, $b, $c, $d);
+        $object = DateUtils::getNthWeekdayInMonth($a, $b, $c, $d);
+
+        $this->assertEquals($expected, $object->format('Y-m-d'));
+    }
+
+    /**
+     * @test
+     */
+    public function testGetLastDayOfMonthReturnsDateTime()
+    {
+        $object = DateUtils::getLastDayOfMonth(2013, 2);
+
+        $this->assertInstanceOf('DateTime', $object);
+    }
+
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     */
+    public function testGetLastDayOfMonthTrowsExceptionOnInvalidInput()
+    {
+        DateUtils::getLastDayOfMonth('unit', 'test');
+    }
+
+    /**
+     * @ptest
+     * @dataProvider monthProvider
+     */
+    public function testGetLastDayOfMonthReturnsCorrectDate($a, $b, $expected)
+    {
+        $object = DateUtils::getLastDayOfMonth($a, $b);
 
         $this->assertEquals($expected, $object->format('Y-m-d'));
     }

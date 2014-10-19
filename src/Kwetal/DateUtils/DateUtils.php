@@ -9,7 +9,7 @@ namespace Kwetal\DateUtils;
 class DateUtils
 {
     /**
-     * Get the nth weekday in a given month and year.
+     * Returns the nth weekday in a given month.
      *
      * @param int $year
      * @param int $month
@@ -21,7 +21,7 @@ class DateUtils
      *
      * @return \DateTime
      */
-    public static function getNthWeekdayInMonthAndYear($year, $month, $weekday, $num = 1, \DateTime $start = null)
+    public static function getNthWeekdayInMonth($year, $month, $weekday, $num = 1, \DateTime $start = null)
     {
         if (! in_array($weekday, ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])) {
             throw new \InvalidArgumentException("Invalid value For weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').");
@@ -58,5 +58,27 @@ class DateUtils
         }
 
         return $day;
+    }
+
+    /**
+     * @param $year
+     * @param $month
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \DateTime
+     */
+    public static function getLastDayOfMonth($year, $month)
+    {
+        try {
+            $date = new \DateTime($year . '-' . $month . '-1');
+        } catch (\Exception $e) {
+            throw new \InvalidArgumentException($e->getMessage());
+        }
+
+        $date->add(new \DateInterval('P1M'));
+        $date->sub(new \DateInterval('P1D'));
+
+        return $date;
     }
 }
