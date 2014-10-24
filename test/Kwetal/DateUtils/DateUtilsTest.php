@@ -85,6 +85,26 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    public function easterDatesProvider()
+    {
+        return [
+            [1994, '1994-04-03'],
+            [1997, '1997-03-30'],
+            [2000, '2000-04-23'],
+            [2003, '2003-04-20'],
+            [2006, '2006-04-16'],
+            [2009, '2009-04-12'],
+            [2012, '2012-04-08'],
+            [2015, '2015-04-05'],
+            [2018, '2018-04-01'],
+            [2021, '2021-04-04'],
+            [2024, '2024-03-31'],
+            [2027, '2027-03-28'],
+            [2030, '2030-04-21'],
+            [2033, '2033-04-17'],
+        ];
+    }
+
     /**
      * @test
      * @expectedException InvalidArgumentException
@@ -210,6 +230,26 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     public function testGetLastWeekdayOfMonthReturnsCorrectDate($a, $b, $c, $expected)
     {
         $object = DateUtils::getLastWeekdayOfMonth($a, $b, $c);
+
+        $this->assertEquals($expected, $object->format('Y-m-d'));
+    }
+
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     */
+    public function testGetEasterSundayThrowsExceptionOnInvalidYear()
+    {
+        DateUtils::getEasterSunday('test');
+    }
+
+    /**
+     * @ptest
+     * @dataProvider easterDatesProvider
+     */
+    public function testGetEasterSundayReturnsCorrectDate($a, $expected)
+    {
+        $object = DateUtils::getEasterSunday($a);
 
         $this->assertEquals($expected, $object->format('Y-m-d'));
     }

@@ -8,10 +8,6 @@ namespace Kwetal\DateUtils;
  */
 class DateUtils
 {
-    const EASTER_JULIAN   = 1;
-    const EASTER_ORTHODOX = 2;
-    const EASTER_WESTERN  = 3;
-
     protected static $validWeekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     /**
@@ -30,7 +26,7 @@ class DateUtils
     public static function getNthWeekdayInMonth($year, $month, $weekday, $num = 1, \DateTime $start = null)
     {
         if (! in_array($weekday, self::$validWeekdays)) {
-            throw new \InvalidArgumentException("Invalid value For weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').");
+            throw new \InvalidArgumentException("Invalid value for weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').");
         }
 
         try {
@@ -78,7 +74,7 @@ class DateUtils
     public static function getLastWeekdayOfMonth($year, $month, $weekday)
     {
         if (! in_array($weekday, self::$validWeekdays)) {
-            throw new \InvalidArgumentException("Invalid value For weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').");
+            throw new \InvalidArgumentException("Invalid value for weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').");
         }
 
         try {
@@ -116,6 +112,21 @@ class DateUtils
 
         $date->add(new \DateInterval('P1M'));
         $date->sub(new \DateInterval('P1D'));
+
+        return $date;
+    }
+
+    public static function getEasterSunday($year)
+    {
+        if (! is_int($year)) {
+            throw new \InvalidArgumentException('parameter $year must be an integer');
+        }
+
+        $num = easter_days($year);
+
+        $date = new \DateTime(sprintf('%s-03-21', $year));
+
+        $date->add(new \DateInterval(sprintf('P%sD', $num)));
 
         return $date;
     }
