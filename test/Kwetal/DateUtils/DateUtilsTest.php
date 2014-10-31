@@ -105,8 +105,27 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    public function julianEasterDatesProvider()
+    {
+        return [
+            [1994, DateUtils::EASTER_JULIAN, '1994-04-24'],
+            [1997, DateUtils::EASTER_JULIAN, '1997-04-20'],
+            [2000, DateUtils::EASTER_JULIAN, '2000-04-16'],
+            [2003, DateUtils::EASTER_JULIAN, '2003-04-13'],
+            [2006, DateUtils::EASTER_JULIAN, '2006-04-09'],
+            [2009, DateUtils::EASTER_JULIAN, '2009-04-05'],
+            [2012, DateUtils::EASTER_JULIAN, '2012-04-01'],
+            [2015, DateUtils::EASTER_JULIAN, '2015-03-29'],
+            [2018, DateUtils::EASTER_JULIAN, '2018-03-25'],
+            [2021, DateUtils::EASTER_JULIAN, '2021-04-25'],
+            [2024, DateUtils::EASTER_JULIAN, '2024-04-21'],
+            [2027, DateUtils::EASTER_JULIAN, '2027-04-18'],
+            [2030, DateUtils::EASTER_JULIAN, '2030-04-14'],
+            [2033, DateUtils::EASTER_JULIAN, '2033-04-10'],
+        ];
+    }
+
     /**
-     * @test
      * @expectedException InvalidArgumentException
      */
     public function  testGetNthWeekdayInMontInYearThrowsExceptionOnInvalidDayString()
@@ -115,7 +134,6 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @expectedException InvalidArgumentException
      */
     public function  testGetNthWeekdayInMontInYearThrowsExceptionOnInvalidDate()
@@ -124,7 +142,6 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @expectedException InvalidArgumentException
      */
     public function  testGetNthWeekdayInMontInYearThrowsExceptionOnDateMismatch()
@@ -132,9 +149,6 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
         DateUtils::getNthWeekdayInMonth(2014, 1, 'Sun', 1, new \DateTime('2010-05-01'));
     }
 
-    /**
-     * @test
-     */
     public function  testGetNthWeekdayInMontInYearReturnsDateTime()
     {
         $object = DateUtils::getNthWeekdayInMonth(2014, 1, 'Mon', 1);
@@ -142,19 +156,13 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DateTime', $object);
     }
 
-
-    /**
-     * @test
-     */
     public function  testGetNthWeekdayInMontInYearReturnsNullWithInvalidNumParameter()
     {
         $object = DateUtils::getNthWeekdayInMonth(2014, 1, 'Mon', 8);
-
         $this->assertNull($object);
     }
 
     /**
-     * @test
      * @dataProvider dateWithStartDateProvider
      */
     public function  testGetNthWeekdayInMontInYearWithStartDateReturnsCorrectDateTime($a, $b, $c, $d, $e, $expected)
@@ -165,7 +173,6 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @dataProvider dateProvider
      */
     public function  testGetNthWeekdayInMontInYearReturnsCorrectDateTime($a, $b, $c, $d, $expected)
@@ -176,8 +183,13 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
+     * @expectedException InvalidArgumentException
      */
+    public function  testGetNextWeekdayThrowsExceptionOnInvalidDayString()
+    {
+        DateUtils::getNextWeekday(new \DateTime(), 'WTF');
+    }
+
     public function testGetLastDayOfMonthReturnsDateTime()
     {
         $object = DateUtils::getLastDayOfMonth(2013, 2);
@@ -186,7 +198,6 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @expectedException InvalidArgumentException
      */
     public function testGetLastDayOfMonthTrowsExceptionOnInvalidInput()
@@ -215,7 +226,6 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @expectedException InvalidArgumentException
      */
     public function testGetLastWeekdayOfMonthThrowsExceptionOnInvalidWeekday()
@@ -224,7 +234,6 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @ptest
      * @dataProvider lastWeekProvider
      */
     public function testGetLastWeekdayOfMonthReturnsCorrectDate($a, $b, $c, $expected)
@@ -235,7 +244,6 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @expectedException InvalidArgumentException
      */
     public function testGetEasterSundayThrowsExceptionOnInvalidYear()
@@ -244,12 +252,21 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @ptest
      * @dataProvider easterDatesProvider
      */
     public function testGetEasterSundayReturnsCorrectDate($a, $expected)
     {
         $object = DateUtils::getEasterSunday($a);
+
+        $this->assertEquals($expected, $object->format('Y-m-d'));
+    }
+
+    /**
+     * @dataProvider julianEasterDatesProvider
+     */
+    public function testGetEasterSundayForJulianCalendarReturnsCorrectDate($a,$b, $expected)
+    {
+        $object = DateUtils::getEasterSunday($a, $b);
 
         $this->assertEquals($expected, $object->format('Y-m-d'));
     }
