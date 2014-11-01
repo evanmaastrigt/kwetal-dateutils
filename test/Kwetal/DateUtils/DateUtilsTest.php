@@ -85,23 +85,23 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-    public function easterDatesProvider()
+    public function gregorianEasterDatesProvider()
     {
         return [
-            [1994, '1994-04-03'],
-            [1997, '1997-03-30'],
-            [2000, '2000-04-23'],
-            [2003, '2003-04-20'],
-            [2006, '2006-04-16'],
-            [2009, '2009-04-12'],
-            [2012, '2012-04-08'],
-            [2015, '2015-04-05'],
-            [2018, '2018-04-01'],
-            [2021, '2021-04-04'],
-            [2024, '2024-03-31'],
-            [2027, '2027-03-28'],
-            [2030, '2030-04-21'],
-            [2033, '2033-04-17'],
+            [1994, DateUtils::EASTER_GREGORIAN, '1994-04-03'],
+            [1997, DateUtils::EASTER_GREGORIAN, '1997-03-30'],
+            [2000, DateUtils::EASTER_GREGORIAN, '2000-04-23'],
+            [2003, DateUtils::EASTER_GREGORIAN, '2003-04-20'],
+            [2006, DateUtils::EASTER_GREGORIAN, '2006-04-16'],
+            [2009, DateUtils::EASTER_GREGORIAN, '2009-04-12'],
+            [2012, DateUtils::EASTER_GREGORIAN, '2012-04-08'],
+            [2015, DateUtils::EASTER_GREGORIAN, '2015-04-05'],
+            [2018, DateUtils::EASTER_GREGORIAN, '2018-04-01'],
+            [2021, DateUtils::EASTER_GREGORIAN, '2021-04-04'],
+            [2024, DateUtils::EASTER_GREGORIAN, '2024-03-31'],
+            [2027, DateUtils::EASTER_GREGORIAN, '2027-03-28'],
+            [2030, DateUtils::EASTER_GREGORIAN, '2030-04-21'],
+            [2033, DateUtils::EASTER_GREGORIAN, '2033-04-17'],
         ];
     }
 
@@ -252,11 +252,19 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider easterDatesProvider
+     * @expectedException InvalidArgumentException
      */
-    public function testGetEasterSundayReturnsCorrectDate($a, $expected)
+    public function testGetEasterSundayThrowsExceptionOnInvalidMethod()
     {
-        $object = DateUtils::getEasterSunday($a);
+        DateUtils::getEasterSunday(1992, 25);
+    }
+
+    /**
+     * @dataProvider gregorianEasterDatesProvider
+     */
+    public function testGetEasterSundayForGregorianCalendarReturnsCorrectDate($a, $b, $expected)
+    {
+        $object = DateUtils::getEasterSunday($a, $b);
 
         $this->assertEquals($expected, $object->format('Y-m-d'));
     }
