@@ -1,8 +1,15 @@
 {
     "name": "kwetal/dateutils",
+    "description": "A number of utility methods for handling date related operations, wrapped in a object-oriented interface",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Edwin van Maastrigt",
+            "homepage": "https://github.com/evanmaastrigt?tab=repositories"
+        }
+    ],
     "require": {
-        "php":">=5.3.0"
+        "php":">=5.4.0"
     },
     "require-dev": {
         "phpunit/phpunit": "4.3.*"
