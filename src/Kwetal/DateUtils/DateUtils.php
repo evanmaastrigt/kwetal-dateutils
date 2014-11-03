@@ -60,6 +60,7 @@ class DateUtils
             $day = $start;
         }
 
+        $interval = new \DateInterval('P1D');
         $counter = 0;
         while (true) {
             if ($day->format('n') !== (string)$month) {
@@ -74,10 +75,48 @@ class DateUtils
                 break;
             }
 
-            $day = $day->add(new \DateInterval('P1D'));
+            $day = $day->add($interval);
         }
 
         return $day;
+    }
+
+    /**
+     * Returns the nth weekday before the given day
+     *
+     * @param \DateTime $originalDay
+     * @param string $weekday
+     * @param int $delta
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \DateTime
+     */
+    public static function getNthWeekdayBefore(\DateTime $originalDay, $weekday, $delta = 1)
+    {
+        $day = clone $originalDay;
+
+        if (!in_array($weekday, self::$validWeekdays)) {
+            throw new \InvalidArgumentException("Invalid value for weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').");
+        }
+
+        $interval = new \DateInterval('P1D');
+        $counter = 0;
+        while (true) {
+            if ($day->format('D') === $weekday) {
+                ++$counter;
+            }
+
+            if ($counter == $delta) {
+                break;
+            }
+
+            $day = $day->sub($interval);
+        }
+
+        return $day;
+
+
     }
 
     /**

@@ -45,6 +45,19 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    public function weekdayBeforeProvider()
+    {
+        return [
+            [new \DateTime('2014-01-01'), 'Sun', 2, '2013-12-22'],
+            [new \DateTime('2014-03-25'), 'Mon', 1, '2014-03-24'],
+            [new \DateTime('2014-05-12'), 'Tue', 1, '2014-05-06'],
+            [new \DateTime('2014-07-31'), 'Wed', 3, '2014-07-16'],
+            [new \DateTime('2014-09-11'), 'Thu', 1, '2014-09-11'],
+            [new \DateTime('2014-11-23'), 'Wed', 1, '2014-11-19'],
+            [new \DateTime('2014-12-25'), 'Sun', 7, '2014-11-09'],
+        ];
+    }
+
     public function monthProvider()
     {
         return [
@@ -165,7 +178,7 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider dateWithStartDateProvider
      */
-    public function  testGetNthWeekdayInMontInYearWithStartDateReturnsCorrectDateTime($a, $b, $c, $d, $e, $expected)
+    public function  testGweekdayBeforeProvideretNthWeekdayInMontInYearWithStartDateReturnsCorrectDateTime($a, $b, $c, $d, $e, $expected)
     {
         $object = DateUtils::getNthWeekdayInMonth($a, $b, $c, $d, $e);
 
@@ -178,6 +191,24 @@ class DateUtilsTest extends PHPUnit_Framework_TestCase
     public function  testGetNthWeekdayInMontInYearReturnsCorrectDateTime($a, $b, $c, $d, $expected)
     {
         $object = DateUtils::getNthWeekdayInMonth($a, $b, $c, $d);
+
+        $this->assertEquals($expected, $object->format('Y-m-d'));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function  testGetNthWeekdayBeforeThrowsExceptionOnInvalidDayString()
+    {
+        DateUtils::getNthWeekdayBefore(new \DateTime(), 'WTF');
+    }
+
+    /**
+     * @dataProvider weekdayBeforeProvider
+     */
+    public function testGetNthWeekdayBeforeReturnsCorrectDateTime($a, $b, $c, $expected)
+    {
+        $object = DateUtils::getNthWeekdayBefore($a, $b, $c);
 
         $this->assertEquals($expected, $object->format('Y-m-d'));
     }
