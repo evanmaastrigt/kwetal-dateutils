@@ -6,7 +6,7 @@ A number of utility methods for handling date related operations, wrapped in a o
 Installation
 ------------
 
-The recommended way to install Geocoder is through composer.
+The recommended way to install DateUtils is through composer.
 
 Just create a `composer.json` file for your project:
 
