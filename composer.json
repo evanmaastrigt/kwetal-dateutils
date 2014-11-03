@@ -1,6 +1,6 @@
 {
     "name": "kwetal/dateutils",
-    "license": "MIT"
+    "license": "MIT",
     "require": {
         "php":">=5.3.0"
     },
