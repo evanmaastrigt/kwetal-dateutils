@@ -2,6 +2,8 @@
 
 namespace Kwetal\DateUtils;
 
+use Kwetal\DateUtils\DateTime\DateTime;
+
 /**
  * Class DateUtils
  * @package Kwetal\DateUtils
@@ -35,20 +37,20 @@ class DateUtils
      * @param int $month
      * @param string $weekday
      * @param int $num
-     * @param \DateTime $start
+     * @param DateTime $start
      *
      * @throws \InvalidArgumentException
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public static function getNthWeekdayInMonth($year, $month, $weekday, $num = 1, \DateTime $start = null)
+    public static function getNthWeekdayInMonth($year, $month, $weekday, $num = 1, \DateTimeInterface $start = null)
     {
         if (!in_array($weekday, self::$validWeekdays)) {
             throw new \InvalidArgumentException("Invalid value for weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').");
         }
 
         try {
-            $day = new \DateTime(sprintf('%s-%s-01', $year, $month));
+            $day = new DateTime(sprintf('%s-%s-01', $year, $month));
         } catch (\Exception $e) {
             throw new \InvalidArgumentException($e->getMessage());
         }
@@ -84,15 +86,15 @@ class DateUtils
     /**
      * Returns the nth weekday before the given day
      *
-     * @param \DateTime $originalDay
+     * @param DateTime $originalDay
      * @param string $weekday
      * @param int $delta
      *
      * @throws \InvalidArgumentException
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public static function getNthWeekdayBefore(\DateTime $originalDay, $weekday, $delta = 1)
+    public static function getNthWeekdayBefore(\DateTimeInterface $originalDay, $weekday, $delta = 1)
     {
         $day = clone $originalDay;
 
@@ -122,11 +124,11 @@ class DateUtils
     /**
      * Returns the next weekday from the given Date, can be a date in a later month
      *
-     * @param \DateTime $origDay
+     * @param DateTime $origDay
      * @param string $weekday
-     * @return \DateTime
+     * @return DateTime
      */
-    public static function getNextWeekday(\DateTime $origDay, $weekday)
+    public static function getNextWeekday(\DateTimeInterface $origDay, $weekday)
     {
         if (!in_array($weekday, self::$validWeekdays)) {
             throw new \InvalidArgumentException("Invalid value for weekday (must be one of 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').");
@@ -152,7 +154,7 @@ class DateUtils
      *
      * @throws InvalidArgumentException
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public static function getLastWeekdayOfMonth($year, $month, $weekday)
     {
@@ -161,7 +163,7 @@ class DateUtils
         }
 
         try {
-            $day = new \DateTime(sprintf('%s-%s-%s', $year, $month, self::getLastDayOfMonth($year, $month)->format('d')));
+            $day = new DateTime(sprintf('%s-%s-%s', $year, $month, self::getLastDayOfMonth($year, $month)->format('d')));
         } catch (\Exception $e) {
             throw new \InvalidArgumentException($e->getMessage());
         }
@@ -185,12 +187,12 @@ class DateUtils
      *
      * @throws \InvalidArgumentException
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public static function getLastDayOfMonth($year, $month)
     {
         try {
-            $date = new \DateTime(sprintf('%s-%s-01', $year, $month));
+            $date = new DateTime(sprintf('%s-%s-01', $year, $month));
         } catch (\Exception $e) {
             throw new \InvalidArgumentException($e->getMessage());
         }
@@ -205,7 +207,7 @@ class DateUtils
      * Returns the Easter sunday in the given year
      *
      * @param int $year
-     * @return \DateTime
+     * @return DateTime
      */
     public static function getEasterSunday($year, $method = self::EASTER_GREGORIAN)
     {
@@ -233,13 +235,13 @@ class DateUtils
      * Returns the Easter sunday in the given year, using the Julian Calendar
      *
      * @param int $year
-     * @return \DateTime
+     * @return DateTime
      */
     private static function getEasterSundayJulian($year)
     {
         $paschalFullMoon = self::getJulianPaschalFullMoonForGoldenNumber(self::getGoldenNumber($year));
 
-        $day = new \DateTime(sprintf('%s-%s', $year,$paschalFullMoon));
+        $day = new DateTime(sprintf('%s-%s', $year,$paschalFullMoon));
 
         return self::getEasterFromPaschalFullMoon($day);
     }
@@ -248,7 +250,7 @@ class DateUtils
      * Returns the Easter sunday in the given year, using the Gregorian Calendar
      *
      * @param int $year
-     * @return \DateTime
+     * @return DateTime
      */
     private static function getEasterSundayGregorian($year)
     {
@@ -264,7 +266,7 @@ class DateUtils
 
         $paschalFullMoon = self::getJulianPaschalFullMoonForEpact($gregorianEpact, $goldenNumber);
 
-        $day = new \DateTime(sprintf('%s-%s', $year, $paschalFullMoon));
+        $day = new DateTime(sprintf('%s-%s', $year, $paschalFullMoon));
 
         return self::getEasterFromPaschalFullMoon($day);
     }
@@ -376,10 +378,10 @@ class DateUtils
      *
      * If this Full Moon day is a Sunday, the next Sunday is used.
      *
-     * @param \DateTime $day
-     * @return \DateTime
+     * @param DateTime $day
+     * @return DateTime
      */
-    private static function getEasterFromPaschalFullMoon(\DateTime $day)
+    private static function getEasterFromPaschalFullMoon(\DateTimeInterface $day)
     {
         if ($day->format('D') === 'Sun') {
             $day->add(new \DateInterval('P1D'));
