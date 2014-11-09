@@ -17,8 +17,8 @@
     "suggest": {
     },
     "autoload": {
-        "psr-0": {
-            "Kwetal\\DateUtils": "src/"
+        "psr-4": {
+            "Kwetal\\DateUtils\\": "src"
         }
     },
     "extra": {

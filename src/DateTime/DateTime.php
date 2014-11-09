@@ -34,7 +34,7 @@ class DateTime extends \DateTime
 
     /**
      * Add a label for this day
-     * 
+     *
      * @param $label
      * @return $this
      */
