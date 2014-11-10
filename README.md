@@ -38,5 +38,5 @@ Unit tests
 
 After installing, from the root project dir run
 ```bash
-$ vendor/phpunit/phpunit/phpunit
+$ vendor/bin/phpunit
 ```
